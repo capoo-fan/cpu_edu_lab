@@ -1,4 +1,6 @@
 obj_path = ./obj
+# LoongArch 工具链前缀，可按实际环境修改
+TOOLPREFIX = loongarch64-linux-gnu
 
 default: 
 	make all
@@ -13,10 +15,10 @@ tidy:
 	rm -f ${obj_path}/start.s ${obj_path}/start.o 
 
 ${obj_path}/test.s: ${obj_path}/main.elf
-	loongarch32r-linux-gnusf-objdump -alD ${obj_path}/main.elf > ${obj_path}/test.s
+	${TOOLPREFIX}-objdump -alD ${obj_path}/main.elf > ${obj_path}/test.s
 
 ${obj_path}/start.o: ${obj_path}/start.s
-	loongarch32r-linux-gnusf-as -mabi=ilp32 ${obj_path}/start.s -o ${obj_path}/start.o
+	${TOOLPREFIX}-as ${obj_path}/start.s -o ${obj_path}/start.o
 
 ${obj_path}/inst_ram.coe ${obj_path}/inst_ram.mif: ${obj_path}/main.bin ${obj_path}/main.data ${obj_path}/convert
 	cd ${obj_path} && ./convert 
@@ -25,22 +27,22 @@ ${obj_path}/convert: convert.c
 	gcc ./convert.c -o ${obj_path}/convert 
 
 ${obj_path}/main.bin: ${obj_path}/main.elf
-	loongarch32r-linux-gnusf-objcopy -O binary -j .text ${obj_path}/main.elf ${obj_path}/main.bin
+	${TOOLPREFIX}-objcopy -O binary -j .text ${obj_path}/main.elf ${obj_path}/main.bin
 
 ${obj_path}/main.data: ${obj_path}/main.elf
-	loongarch32r-linux-gnusf-objcopy -O binary -j .data ${obj_path}/main.elf ${obj_path}/main.data
+	${TOOLPREFIX}-objcopy -O binary -j .data ${obj_path}/main.elf ${obj_path}/main.data
 
 ${obj_path}/main.elf: ${obj_path}/start.o
-	loongarch32r-linux-gnusf-ld ${obj_path}/start.o -T bin.lds -o ${obj_path}/main.elf
+	${TOOLPREFIX}-ld ${obj_path}/start.o -T bin.lds -o ${obj_path}/main.elf
 
 ${obj_path}/start.s: start.S
 	@mkdir -p ${obj_path}
-	loongarch32r-linux-gnusf-gcc \
+	${TOOLPREFIX}-gcc \
 		-S start.S > ${obj_path}/start.s 
 
 # ${obj_path}/init.s: init.S
 # 	@mkdir -p ${obj_path}
-# 	loongarch32r-linux-gnusf-gcc \
+# 	${TOOLPREFIX}-gcc \
 # 		-Iinclude -nostdinc -nostdlib -D_KERNEL -fno-builtin -D__loongarch32\
 # 		-DMEMSTART=0x10000000 -DMEMSIZE=0x04000 -DCPU_COUNT_PER_US=1000 -DEXP=$(EXP)    \
 # 		-S init.S > ${obj_path}/init.s 
