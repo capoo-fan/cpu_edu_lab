@@ -54,15 +54,16 @@ begin
     //在这里可以自定义测试输入序列
     switch = ~(8'h4);
 end
-
-soc_mini_top soc_mini
+soc_mini_top 
+#(
+    .SIMULATION(1'b1)  // <--- 核心修改：强制开启仿真模式
+)
+soc_mini
 (
-       .resetn      (resetn     ), 
-       .clk         (clk        ),
-    
-        //------gpio-------
-        .led        (led        ),
-        .switch     (switch     )
-    );   
+    .resetn      (resetn), 
+    .clk         (clk),
+    .led         (led),
+    .switch      (switch)
+);  
 
 endmodule

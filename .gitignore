@@ -39,5 +39,4 @@ rf_wave
 # 通用 obj 目录（minicpu_env/func、mycpu_env/func 等）
 obj/
 
-# 若后续在其他模块下也使用 obj 作为中间文件目录，
-# 以上规则同样会自动生效，无需单独添加。
+project/

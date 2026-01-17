@@ -106,7 +106,7 @@ decoder_5_32 u_dec3(.in(op_19_15 ), .co(op_19_15_d ));
 assign inst_add_w  = op_31_26_d[6'h00] & op_25_22_d[4'h0] & op_21_20_d[2'h1] & op_19_15_d[5'h00];
 assign inst_addi_w = op_31_26_d[6'h00] & op_25_22_d[4'ha];
 assign inst_ld_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h2];
-assign inst_st_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h6];;//在这里实现inst_st_w指令的译码
+assign inst_st_w   = op_31_26_d[6'h0a] & op_25_22_d[4'h6];//在这里实现inst_st_w指令的译码
 assign inst_bne    = op_31_26_d[6'h17];
 
 assign src2_is_imm   = inst_addi_w | inst_ld_w | inst_st_w;//在这里实现立即数选择信号
@@ -144,7 +144,7 @@ assign data_sram_we    = mem_we;
 assign data_sram_addr  = alu_result;
 assign data_sram_wdata = rkd_value;
 
-assign rf_wdata = alu_result;//在这里完成写回寄存器值的选择
+assign rf_wdata = res_from_mem ? data_sram_rdata : alu_result;//在这里完成写回寄存器值的选择
 
 endmodule
                          

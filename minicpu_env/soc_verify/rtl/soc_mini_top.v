@@ -61,7 +61,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //   at this time, cpu_clk frequency are both 100MHz, same as clk.
 `define SIMU_USE_PLL 0 //set 0 to speed up simulation
 
-module soc_mini_top #(parameter SIMULATION=1'b0)
+module soc_mini_top #(SIMULATION=1'b1)
 (
     input  wire        resetn, 
     input  wire        clk,
